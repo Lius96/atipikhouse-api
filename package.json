@@ -1,0 +1,32 @@
+{
+  "name": "atipikhouse-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "prod": "pm2 start server.js -f --watch /var/api/atipikhouse",
+    "test": "ENV=test pm2 start server.js  -f  --watch /var/api/atipikhouse",
+    "STOP": "pm2 stop server.js -f"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^16.1.7",
+    "bcrypt": "^5.0.1",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3",
+    "moment": "^2.24.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2",
+    "pg": "^7.12.1",
+    "pg-format": "^1.0.4",
+    "pm2": "^4.1.2",
+    "underscore": "^1.9.1",
+    "writelog": "^1.1.3"
+  }
+}
