@@ -44,5 +44,5 @@ app.use('/api/v1/comments/', comments);
 const port = process.env.PORT || 4000
 
 app.listen(port, () => {
-  console.log(`We are live on port ${port}`.yellow)
+  console.log(`We are live on port ${port}`.yellow) 
 })
