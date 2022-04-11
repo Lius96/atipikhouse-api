@@ -46,7 +46,7 @@ exports.getHouses= asyncHandler(async (req, res) => {
  * @access  Private
  */
 exports.getAuthorHouses= asyncHandler(async (req, res) => {
-  if (!req.params.id) res.status(204).json({ success: false, message: 'id is required' });
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Houses.findByAuthor(id)
   if (result.rowCount === 0) {
@@ -78,7 +78,7 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
   
   if (error) res.status(204).json({ success: false, message: error.details[0].message })
 
-  const house = await new Houses(
+  const house = new Houses(
     null,
     title,
     description,

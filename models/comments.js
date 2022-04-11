@@ -26,7 +26,7 @@ class Comments {
   save() {
     if (this.id) {
       return pool.query(
-        "UPDATE comments SET content=$1, status=$3, stars_number=$4  WHERE id=$5 RETURNING id",
+        "UPDATE comments SET content=$1, status=$2, stars_number=$3  WHERE id=$4 RETURNING id",
         [
             this.content,
             this.status,

@@ -57,7 +57,7 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
   
   if (error) res.status(204).json({ success: false, message: error.details[0].message })
 
-  const user = await new Users(
+  const user = new Users(
     null,
     lastname,
     firstname,
@@ -123,6 +123,11 @@ exports.editUser = asyncHandler(async (req, res, next) => {
 exports.deleteUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id
 
+  const existUser = await Users.findById(id)
+
+  if (existUser.rowCount == 0) {
+    return next(new ErrorReponse(`User not found with id of ${id}`, 404))
+  }
   const result = await Users.deleteById(id)
   if (result.rowCount === 0) {
     return next(new ErrorReponse(`User not found with id of ${id}`, 404))

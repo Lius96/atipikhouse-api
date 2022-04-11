@@ -55,7 +55,7 @@ exports.createComments = asyncHandler(async (req, res, next) => {
   
   if (error) res.status(204).json({ success: false, message: error.details[0].message })
 
-  const comment = await new Comments(
+  const comment = new Comments(
     null,
     content,
     user_id,
@@ -112,7 +112,7 @@ exports.editComment = asyncHandler(async (req, res, next) => {
   if (result) {
     res
       .status(200)
-      .json({ success: true, data: result.rows[0].ID })
+      .json({ success: true, data: result.rows[0].id })
   }
 })
 

@@ -30,6 +30,8 @@ const login = require('./routes/login')
 const users = require('./routes/users')
 const houses = require('./routes/houses')
 const comments = require('./routes/comments')
+const booking = require('./routes/booking')
+const pages = require('./routes/pages')
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -40,6 +42,8 @@ app.use('/api/v1/login/', login);
 app.use('/api/v1/users/', users);
 app.use('/api/v1/houses/', houses);
 app.use('/api/v1/comments/', comments);
+app.use('/api/v1/booking/', booking);
+app.use('/api/v1/pages/', pages);
 
 const port = process.env.PORT || 4000
 

@@ -13,22 +13,14 @@ class Login {
     return pool.connect()
   }
  
-  find() {
-    if (this.id) {
+  static find(id) {
+    
       return pool.query(
         'SELECT * FROM users WHERE id=$1',
         [
             this.id
         ]
       )
-    } else {
-      return pool.query(
-        'SELECT * FROM users WHERE email=$1',
-        [
-          this.email
-        ]
-      )
-    }
   }
 
 

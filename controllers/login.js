@@ -34,7 +34,7 @@ exports.login = async(req, res, next) => {
     })
 
     if (result) {
-        let user = await login.find().catch(err => {
+        let user = await login.find(result.rows[0].id).catch(err => {
             next(err)
         })
         res

@@ -94,6 +94,46 @@ const logoutValidation = (data) => {
   return schema.validate(data);
 };
 
+const createBookingValidation = (data) => {
+  const schema = Joi.object({
+    price: Joi.string().required(),
+    start_date: Joi.number().required(),
+    end_date: Joi.number().required(),
+    house: Joi.number().required(),
+    user_id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
+    reserved_names: Joi.string()
+  });
+
+  return schema.validate(data);
+};
+
+const updateBookingValidation = (data) => {
+  const schema = Joi.object({
+    start_date: Joi.number().required(),
+    end_date: Joi.number().required(),
+  });
+
+  return schema.validate(data);
+};
+
+
+const createPagesValidation = (data) => {
+  const schema = Joi.object({
+    title: Joi.string().required(),
+    end_date: Joi.object().required(),
+  });
+
+  return schema.validate(data);
+};
+
+const updatePagesValidation = (data) => {
+  const schema = Joi.object({
+    content: Joi.object().required(),
+  });
+
+  return schema.validate(data);
+};
+
 module.exports.createPortofolioValidation = createPortofolioValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.logoutValidation = logoutValidation;
@@ -102,3 +142,7 @@ module.exports.updateUserValidation = updateUserValidation;
 module.exports.createHouseValidation = createHouseValidation;
 module.exports.createCommentsValidation = createCommentsValidation;
 module.exports.updateCommentsValidation = updateCommentsValidation;
+module.exports.createBookingValidation = createBookingValidation;
+module.exports.updateBookingValidation = updateBookingValidation;
+module.exports.createPagesValidation = createPagesValidation;
+module.exports.updatePagesValidation = updatePagesValidation;
