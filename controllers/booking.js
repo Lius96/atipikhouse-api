@@ -27,7 +27,7 @@ exports.getBookings= asyncHandler(async (req, res) => {
  * @route   GET /api/v1/booking/house/:id
  * @access  Private
  */
-exports.getHouseBooking= asyncHandler(async (req, res) => {
+exports.getHouseBooking= asyncHandler(async (req, res, next) => {
   if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Booking.findByHouse(id)
@@ -44,7 +44,7 @@ exports.getHouseBooking= asyncHandler(async (req, res) => {
  * @route   GET /api/v1/booking/author/:id
  * @access  Private
  */
-exports.getAuthorBooking= asyncHandler(async (req, res) => {
+exports.getAuthorBooking= asyncHandler(async (req, res, next) => {
   if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Booking.findByAuthor(id)

@@ -45,7 +45,7 @@ exports.getHouses= asyncHandler(async (req, res) => {
  * @route   GET /api/v1/houses/author/:id
  * @access  Private
  */
-exports.getAuthorHouses= asyncHandler(async (req, res) => {
+exports.getAuthorHouses= asyncHandler(async (req, res, next) => {
   if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Houses.findByAuthor(id)

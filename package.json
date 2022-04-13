@@ -5,8 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "prod": "pm2 start server.js -f --watch /var/api/atipikhouse",
-    "test": "ENV=test pm2 start server.js  -f  --watch /var/api/atipikhouse",
+    "prod": "pm2 start server.js -f --watch /var/apis/atipikhouse",
+    "test": "ENV=test pm2 start server.js  -f  --watch /var/apis/atipikhouse",
     "STOP": "pm2 stop server.js -f"
   },
   "keywords": [],
@@ -22,10 +22,12 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
+    "nodemailer": "^6.7.3",
+    "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.2",
     "pg": "^7.12.1",
     "pg-format": "^1.0.4",
-    "pm2": "^4.1.2",
+    "pm2": "^2.10.4",
     "underscore": "^1.9.1",
     "writelog": "^1.1.3"
   }

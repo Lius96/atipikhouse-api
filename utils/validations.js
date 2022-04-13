@@ -107,6 +107,17 @@ const createBookingValidation = (data) => {
   return schema.validate(data);
 };
 
+const sendMailValidation = (data) => {
+  const schema = Joi.object({
+    from: Joi.string().required(),
+    to: Joi.string().required(),
+    subject: Joi.string().required(),
+    body: Joi.string().required(),
+  });
+
+  return schema.validate(data);
+};
+
 const updateBookingValidation = (data) => {
   const schema = Joi.object({
     start_date: Joi.number().required(),
@@ -146,3 +157,4 @@ module.exports.createBookingValidation = createBookingValidation;
 module.exports.updateBookingValidation = updateBookingValidation;
 module.exports.createPagesValidation = createPagesValidation;
 module.exports.updatePagesValidation = updatePagesValidation;
+module.exports.sendMailValidation = sendMailValidation;
