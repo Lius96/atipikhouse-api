@@ -67,9 +67,7 @@ exports.createComments = asyncHandler(async (req, res, next) => {
     stars_number,
     house,
   )
-  const result = await comment.save().catch(err => {
-    next(err)
-  })
+  const result = await comment.save()
   if (result) {
     res
       .status(200)
@@ -111,9 +109,7 @@ exports.editComment = asyncHandler(async (req, res, next) => {
     null
   )
 
-  const result = await comment.save().catch(err => {
-      next(err)
-  })
+  const result = await comment.save()
 
   if (result) {
     res

@@ -17,9 +17,7 @@ const _ = require("underscore");
 exports.login = async (req, res, next) => {
   const { error } = loginValidation(req.body);
   if (error) return next(new ErrorReponse(error.details[0].message, 400));
-  let account = await Login.findByEmail(req.body.email).catch((err) => {
-    next(new ErrorReponse(err, 400));
-  });
+  let account = await Login.findByEmail(req.body.email)
   if (account.rowCount == 0) {
     res.status(200).json({ success: false, message: "Bad credential" });
     return;

@@ -71,9 +71,7 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
     getHashedPassword(password),
     encodeString(email)
   )
-  const result = await user.save().catch(err => {
-    next(err)
-  })
+  const result = await user.save()
   if (result) {
     res
       .status(200)
@@ -104,9 +102,7 @@ exports.editUser = asyncHandler(async (req, res, next) => {
     id, lastname, firstname, null, address, phone, social_link, null, moment().unix() 
   )
 
-  const result = await user.save().catch(err => {
-      next(err)
-  })
+  const result = await user.save()
 
   if (result) {
     res

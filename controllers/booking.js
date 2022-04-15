@@ -122,9 +122,7 @@ exports.editBooking = asyncHandler(async (req, res, next) => {
     null
   )
 
-  const result = await booking.save().catch(err => {
-      next(err)
-  })
+  const result = await booking.save()
 
   if (result) {
     res

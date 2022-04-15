@@ -58,9 +58,7 @@ exports.creatPage = asyncHandler(async (req, res, next) => {
     title,
     content,
   )
-  const result = await page.save().catch(err => {
-    next(err)
-  })
+  const result = await page.save()
   if (result) {
     res
       .status(200)
@@ -93,10 +91,7 @@ exports.editPage = asyncHandler(async (req, res, next) => {
     content,
   )
 
-  const result = await page.save().catch(err => {
-      next(err)
-  })
-
+  const result = await page.save()
   if (result) {
     res
       .status(200)
