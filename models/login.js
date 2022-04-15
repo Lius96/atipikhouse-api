@@ -18,7 +18,7 @@ class Login {
       return pool.query(
         'SELECT * FROM users WHERE id=$1',
         [
-            this.id
+            id
         ]
       )
   }
@@ -52,13 +52,13 @@ class Login {
       }
   }
 
-  static findByEmail(email) {
+  static async findByEmail(email) {
     return pool.query(
-        'SELECT * FROM users WHERE email=$1',
-        [
-          email
-        ]
-      )
+      'SELECT * FROM users WHERE email=$1',
+      [
+        email
+      ]
+    )
   }
 }
 

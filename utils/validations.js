@@ -81,7 +81,7 @@ const updateCommentsValidation = (data) => {
 
 const loginValidation = (data) => {
   const schema = Joi.object({
-    email: Joi.string().min(9).required(),
+    email: Joi.string().min(5).required(),
     password: Joi.string().min(5).required(),
   });
   return schema.validate(data);

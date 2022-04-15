@@ -14,8 +14,8 @@ const { createCommentsValidation, updateCommentsValidation } = require('../utils
 exports.getComments= asyncHandler(async (req, res) => {
 
   const result = await Comments.getAll()
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `Comments is empty`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `Comments is empty`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -28,11 +28,11 @@ exports.getComments= asyncHandler(async (req, res) => {
  * @access  Private
  */
 exports.getHouseComments= asyncHandler(async (req, res) => {
-  if (!req.params.id) res.status(204).json({ success: false, message: 'id is required' });
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Comments.findByHouse(id)
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `comments is empty for house ${id}`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `comments is empty for house ${id}`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -53,7 +53,10 @@ exports.createComments = asyncHandler(async (req, res, next) => {
     } = req.body
   const { error } = createCommentsValidation(req.body)
   
-  if (error) res.status(204).json({ success: false, message: error.details[0].message })
+  if (error){
+    res.status(200).json({ success: false, message: error.details[0].message })
+    return;
+  } 
 
   const comment = new Comments(
     null,
@@ -87,7 +90,10 @@ exports.editComment = asyncHandler(async (req, res, next) => {
   const id = req.params.id
 
   const { error } = updateCommentsValidation(req.body)
-  if (error) return next(new ErrorReponse(error.details[0].message, 404))
+  if (error) {
+    res.status(200).json({ success: false, message: error.details[0].message })
+    return;
+  }
 
   const existcomment = await Comments.findById(id)
 
@@ -123,11 +129,12 @@ exports.editComment = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.deleteComment = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id
-
   const result = await Comments.deleteById(id)
-  if (result.rowCount === 0) {
-    return next(new ErrorReponse(`Comment not found with id of ${id}`, 404))
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `Comment not found with id of ${id}`})
+    return
   }
   res.status(200).json({ success: true, data: id })
 })

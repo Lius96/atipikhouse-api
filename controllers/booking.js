@@ -14,8 +14,8 @@ const { createBookingValidation, updateBookingValidation } = require('../utils/v
 exports.getBookings= asyncHandler(async (req, res) => {
 
   const result = await Booking.getAll()
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `Booking is empty`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `Booking is empty`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -31,8 +31,8 @@ exports.getHouseBooking= asyncHandler(async (req, res, next) => {
   if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Booking.findByHouse(id)
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `booking is empty for house ${id}`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `booking is empty for house ${id}`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -48,8 +48,8 @@ exports.getAuthorBooking= asyncHandler(async (req, res, next) => {
   if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id;
   const result = await Booking.findByAuthor(id)
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `booking is empty for user ${id}`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `booking is empty for user ${id}`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -82,9 +82,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
       house,
       reserved_names
   )
-  const result = await booking.save().catch(err => {
-    next(err)
-  })
+  const result = await booking.save()
   if (result) {
     res
       .status(200)
@@ -99,6 +97,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.editBooking = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const { start_date,
     end_date,
 } = req.body
@@ -141,6 +140,7 @@ exports.editBooking = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.deleteBooking = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id
 
   const result = await Booking.deleteById(id)

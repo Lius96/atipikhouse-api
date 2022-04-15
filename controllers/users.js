@@ -13,11 +13,12 @@ const { getHashedPassword, encodeString } = require('../utils/helpers')
  * @access  Private
  */
 exports.getUser= asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id
 
   const result = await Users.findById(id)
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `User not found with id of ${id}`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `User not found with id of ${id}`})
   }else{
     res.status(200).json({ success: true, data: result.rows[0] })
   }  
@@ -32,8 +33,8 @@ exports.getUser= asyncHandler(async (req, res, next) => {
 exports.getUsers= asyncHandler(async (req, res, next) => {
 
   const result = await Users.getAll()
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `Users is empty}`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `Users is empty}`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -55,7 +56,7 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
     } = req.body
   const { error } = createUserValidation(req.body)
   
-  if (error) res.status(204).json({ success: false, message: error.details[0].message })
+  if (error) return next(new ErrorReponse(error.details[0].message, 400))
 
   const user = new Users(
     null,
@@ -91,7 +92,7 @@ exports.editUser = asyncHandler(async (req, res, next) => {
   const id = req.params.id
 
   const { error } = updateUserValidation(req.body)
-  if (error) return next(new ErrorReponse(error.details[0].message, 404))
+  if (error) return next(new ErrorReponse(error.details[0].message, 400))
 
   const existUser = await Users.findById(id)
 
@@ -126,11 +127,11 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   const existUser = await Users.findById(id)
 
   if (existUser.rowCount == 0) {
-    return next(new ErrorReponse(`User not found with id of ${id}`, 404))
+    return next(new ErrorReponse(`User not found with id of ${id}`, 400))
   }
   const result = await Users.deleteById(id)
   if (result.rowCount === 0) {
-    return next(new ErrorReponse(`User not found with id of ${id}`, 404))
+    return next(new ErrorReponse(`User can be deleted for user id ${id}`, 404))
   }
   res.status(200).json({ success: true, data: id })
 })

@@ -126,9 +126,13 @@ module.exports.object2SQL = function(obj, type) {
   }  
 };
 
-module.exports.updateLoginHistory = (obj, newTime) =>{
-  var size = Object.keys(obj).length;
-  let Obj = obj;
+module.exports.updateLoginHistory = (obj={}, newTime) =>{
+  var size = 0
+  let Obj = {};
+  if (obj) {
+    size = Object.keys(obj).length;
+    Obj = obj;
+  }
   Obj[size++] = newTime;
   return Obj
 }

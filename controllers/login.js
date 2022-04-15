@@ -1,48 +1,52 @@
-const { loginValidation,  } = require('../utils/validations')
-const Login = require('../models/login')
-const moment = require('moment')
-const { verifyPass, updateLoginHistory, generateWord } = require("../utils/helpers");
-const _ = require('underscore');
-
+const { loginValidation } = require("../utils/validations");
+const Login = require("../models/login");
+const moment = require("moment");
+const {
+  verifyPass,
+  updateLoginHistory,
+  generateWord,
+} = require("../utils/helpers");
+const _ = require("underscore");
 
 /**
- *  
+ *
  * @access Private
  * @route POST api/v1/login/
  * @return object
  */
-exports.login = async(req, res, next) => {
+exports.login = async (req, res, next) => {
+  const { error } = loginValidation(req.body);
+  if (error) return next(new ErrorReponse(error.details[0].message, 400));
+  let account = await Login.findByEmail(req.body.email).catch((err) => {
+    next(new ErrorReponse(err.details[0].message, 400));
+  });
+  if (account.rowCount == 0) {
+    res.status(200).json({ success: false, message: "Bad credential" });
+    return;
+  }
+  if (!verifyPass(req.body.password, account.rows[0].password)) {
+    res.status(200).json({ success: false, message: "Bad credential" });
+    return;
+  }
+  const nowTime = moment().unix();
+  const loginToken = generateWord(18);
+  const login = new Login(
+    account.rows[0].email,
+    account.rows[0].id,
+    updateLoginHistory(account.rows[0].login_history, nowTime),
+    nowTime,
+    loginToken
+  );
 
-    const {error} = loginValidation(req.body)
+  const result = await login.add();
+  if (result) {
+    let user = await Login.find(result.rows[0].id);
 
-    if (error) res.status(204).json({ success: false, message: error.details[0].message })
-    let account = await Login.findByEmail(req.body.logoutValidationemail)
-    if(account.rowCount === 0) res.status(204).json({ success: false, message: 'Bad credential' })
-    if(verifyPass(req.body.password, account.rows[0].password)) res.status(204).json({ success: false, message: 'Bad credential' })
-    const nowTime = moment().unix();
-    const loginToken = generateWord(18);
-    const login = new Login(
-        account.rows[0].email,
-        account.rows[0].id,
-        updateLoginHistory(account.rows[0].login_history, nowTime),
-        nowTime,
-        loginToken
-    ) 
-    
-    const result = await login.add().catch(err => {
-        next(err)
-    })
-
-    if (result) {
-        let user = await login.find(result.rows[0].id).catch(err => {
-            next(err)
-        })
-        res
-          .status(200)
-          .json({ success: true, data: user })
+    if (user) {
+      res.status(200).json({ success: true, data: await user.rows[0] });
     }
-    
-}
+  }
+};
 
 /**
  * @desc remove user sessionToken
@@ -51,21 +55,17 @@ exports.login = async(req, res, next) => {
  * @route DELETE api/v1/login/
  */
 exports.logout = async (req, res, next) => {
+  const { error } = logoutValidation(req.body);
+  if (error) return next(new ErrorReponse(error.details[0].message, 400));
 
-    const {error} = logoutValidation(req.body)
-    if (error) res.status(204).json({ success: false, message: error.details[0].message })
+  const login = new Login(null, req.body.id);
 
-    const login = new Login(
-        null,
-        req.body.id,
-    )
+  const result = await login.delete().catch((err) => {
+    next(err);
+  });
 
-    const result = await login.delete().catch(err => {
-        next(err)
-    })
-
-    res.status(200).json({
-        success: true,
-        data: result.rows[0]
-    })
-}
+  res.status(200).json({
+    success: true,
+    data: result.rows[0].id,
+  });
+};

@@ -12,12 +12,12 @@ const { createHouseValidation } = require('../utils/validations')
  * @access  Private
  */
 exports.getHouse= asyncHandler(async (req, res, next) => {
-  if (!req.params.id) res.status(204).json({ success: false, message: 'id is required' });
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id
 
   const result = await Houses.findById(id)
-  if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `house not found with id of ${id}`})
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `house not found with id of ${id}`})
   }else{
     res.status(200).json({ success: true, data: result.rows[0] })
   }  
@@ -33,7 +33,7 @@ exports.getHouses= asyncHandler(async (req, res) => {
 
   const result = await Houses.getAll()
   if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `Houses is empty`})
+    res.status(200).json({ success: false,  message: `Houses is empty`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -50,7 +50,7 @@ exports.getAuthorHouses= asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const result = await Houses.findByAuthor(id)
   if (result.rowCount === 0) {
-    res.status(204).json({ success: false,  message: `Houses is empty for author ${id}`})
+    res.status(200).json({ success: false,  message: `Houses is empty for author ${id}`})
   }else{
     res.status(200).json({ success: true, data: result.rows })
   }  
@@ -76,7 +76,10 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
     } = req.body
   const { error } = createHouseValidation(req.body)
   
-  if (error) res.status(204).json({ success: false, message: error.details[0].message })
+  if (error) {
+    res.status(204).json({ success: false, message: error.details[0].message })
+    return;
+  }
 
   const house = new Houses(
     null,
@@ -93,9 +96,7 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
     null,
     off_days
   )
-  const result = await house.save().catch(err => {
-    next(err)
-  })
+  const result = await house.save()
   if (result) {
     res
       .status(200)
@@ -148,9 +149,7 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
     moment().unix(),
   )
 
-  const result = await house.save().catch(err => {
-      next(err)
-  })
+  const result = await house.save()
 
   if (result) {
     res
@@ -166,8 +165,8 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.deleteHouse = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
   const id = req.params.id
-
   const result = await Houses.deleteById(id)
   if (result.rowCount === 0) {
     return next(new ErrorReponse(`House not found with id of ${id}`, 404))
