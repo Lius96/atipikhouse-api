@@ -12,7 +12,8 @@ class Users {
     created_date,
     updated_date,
     password,
-    confirmation_token
+    confirmation_token,
+    grade
   ) {
     this.id = id;
     this.last_name = last_name;
@@ -25,6 +26,7 @@ class Users {
     this.updated_date = updated_date;
     this.password = password;
     this.confirmation_token = confirmation_token;
+    this.grade = grade;
   }
 
   static clientPool() {
@@ -34,7 +36,7 @@ class Users {
   save() {
     if (this.id) {
       return pool.query(
-        "UPDATE users SET last_name=$1, first_name=$2, address=$3, phone=$4, social_link=$5, updated_date=$6, password=$7 WHERE id=$8 RETURNING id",
+        "UPDATE users SET last_name=$1, first_name=$2, address=$3, phone=$4, social_link=$5, updated_date=$6, password=$7, grade=$8 WHERE id=$9 RETURNING id",
         [
           this.last_name,
           this.first_name,
@@ -42,12 +44,13 @@ class Users {
           this.phone,
           this.social_link,
           this.updated_date,
+          this.grade,
           this.id,
         ]
       );
     } else {
       return pool.query(
-        "INSERT INTO users (last_name, first_name, email, address, phone, social_link, created_date, password, confirmation_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id",
+        "INSERT INTO users (last_name, first_name, email, address, phone, social_link, created_date, password, confirmation_token, grade) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id",
         [
           this.last_name,
           this.first_name,
@@ -58,6 +61,7 @@ class Users {
           this.created_date,
           this.password,
           this.confirmation_token,
+          this.grade
         ]
       );
     }

@@ -1,5 +1,6 @@
-const { loginValidation } = require("../utils/validations");
+const { loginValidation, logoutValidation } = require("../utils/validations");
 const Login = require("../models/login");
+const ErrorReponse = require('../utils/errorResponse')
 const moment = require("moment");
 const {
   verifyPass,
@@ -53,14 +54,14 @@ exports.login = async (req, res, next) => {
  * @route DELETE api/v1/login/
  */
 exports.logout = async (req, res, next) => {
-  const { error } = logoutValidation(req.body);
+  const { error } = logoutValidation(req.params);
   if (error) return next(new ErrorReponse(error.details[0].message, 400));
 
-  const login = new Login(null, req.body.id);
+  const login = new Login(null, req.params.id);
 
-  const result = await login.delete().catch((err) => {
-    next(err);
-  });
+  const result = await login.delete().catch(err =>{
+    next(err)
+  })
 
   res.status(200).json({
     success: true,

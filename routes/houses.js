@@ -15,12 +15,12 @@ const {
 
 router
   .route("/")
-  .get(protect, getHouses)
+  .get(getHouses)
   .post(protect, creatHouse);
 
 router
   .route("/:id")
-  .get(protect, getHouse)
+  .get(getHouse)
   .put(protect, editHouse)
   .delete(protect, deleteHouse);
 

@@ -10,7 +10,11 @@ const {
 router
   .route("/")
   .post(login)
-  .delete(logout);
+  
+
+router
+  .route("/:id")
+  .delete(logout)
 
   module.exports = router;
 

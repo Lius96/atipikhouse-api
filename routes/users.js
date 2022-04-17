@@ -15,11 +15,11 @@ const {
 router
   .route("/")
   .get(protect, getUsers)
-  .post(protect, creatUser);
+  .post(creatUser);
 
 router
   .route("/:id")
-  .get(protect, getUser)
+  .get(getUser)
   .put(protect, editUser)
   .delete(protect, deleteUser);
 

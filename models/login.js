@@ -45,8 +45,8 @@ class Login {
             'UPDATE users SET login_session_token=$1, is_online=$2 WHERE id=$3 RETURNING id',
             [
               null,
+              false,
               this.id,
-              false
             ]
           )
       }

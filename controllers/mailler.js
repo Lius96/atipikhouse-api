@@ -33,7 +33,8 @@ exports.sendMail = asyncHandler(async (req, res, next) => {
   };
   transporter.sendMail(mailOptions, function(error){
     if (error) {
-        res.status(204).json({ success: false, data: null });
+      console.log(error)
+        res.status(200).json({ success: false, data: null });
     } else {
         res.status(200).json({ success: true, data: null });
     }

@@ -14,12 +14,12 @@ const {
 
 router
   .route("/")
-  .get(protect, getPages)
+  .get(getPages)
   .post(protect, creatPage);
 
 router
   .route("/:id")
-  .get(protect, getPage)
+  .get(getPage)
   .put(protect, editPage)
   .delete(protect, deletePage);
 

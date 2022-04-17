@@ -20,7 +20,8 @@ const createUserValidation = (data) => {
     address: Joi.string().min(3),
     phone: Joi.string().min(10),
     social_link: Joi.object(),
-    password: Joi.string().min(6),
+    password: Joi.string().min(6).required(),
+    grade: Joi.string()
   });
 
   return schema.validate(data);
@@ -33,6 +34,7 @@ const updateUserValidation = (data) => {
     address: Joi.string().min(3),
     phone: Joi.string().min(10),
     social_link: Joi.object(),
+    grade: Joi.string()
   });
 
   return schema.validate(data);
@@ -89,7 +91,7 @@ const loginValidation = (data) => {
 
 const logoutValidation = (data) => {
   const schema = Joi.object({
-    id: Joi.string().min(9).required(),
+    id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
   });
   return schema.validate(data);
 };

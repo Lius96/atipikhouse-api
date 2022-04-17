@@ -14,7 +14,7 @@ const {
 
 router
   .route("/")
-  .get(protect, getComments)
+  .get(getComments)
   .post(protect, createComments);
 
 router

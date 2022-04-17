@@ -52,7 +52,8 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
     email,
     phone,
     social_link,
-    password
+    password,
+    grade
     } = req.body
   const { error } = createUserValidation(req.body)
   
@@ -69,7 +70,8 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
     moment().unix(),
     null,
     getHashedPassword(password),
-    encodeString(email)
+    encodeString(email),
+    grade
   )
   const result = await user.save()
   if (result) {
