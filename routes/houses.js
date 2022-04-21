@@ -10,7 +10,8 @@ const {
     editHouse,
     getHouses,
     deleteHouse,
-    getAuthorHouses
+    getAuthorHouses,
+    uploadFiles
 } = require("../controllers/houses");
 
 router
@@ -27,5 +28,10 @@ router
 router
   .route("/author/:id")
   .get(protect, getAuthorHouses);
+
+
+router
+  .route("/images/")
+  .post(protect, uploadFiles);
 
 module.exports = router;

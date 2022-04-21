@@ -3,6 +3,8 @@ const _ = require('underscore')
 const asyncHandler = require('../middleware/async')
 const moment = require('moment')
 const ErrorReponse = require('../utils/errorResponse')
+const { uploadPath } = require('../uploadPath')
+
 const { createHouseValidation } = require('../utils/validations')
 
 
@@ -77,7 +79,7 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
   const { error } = createHouseValidation(req.body)
   
   if (error) {
-    res.status(204).json({ success: false, message: error.details[0].message })
+    res.status(200).json({ success: false, message: error.details[0].message })
     return;
   }
 
@@ -172,4 +174,39 @@ exports.deleteHouse = asyncHandler(async (req, res, next) => {
     return next(new ErrorReponse(`House not found with id of ${id}`, 404))
   }
   res.status(200).json({ success: true, data: id })
+})
+
+
+/**
+ * @desc   upload house image 
+ * @route   POST /api/v1/houses/images
+ * @access  Private
+ */
+exports.uploadFiles = asyncHandler(async (req, res, next) => {
+  let storedFiles = [];
+  if ( !req.files || Object.keys(req.files).length === 0) {
+    res.status(202).json({
+      status: false,
+      message: 'Error file not uploaded'
+    })
+  }
+ 
+
+  for (let i = 0; i < Object.keys(req.files).length; i++) {
+    let file = req.files['images'+i];
+    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png' || file.mimetype == 'image/webp') {
+      file.mv(uploadPath + file.name, function(err){
+        if (err) {
+          // console.log('error')
+          return res.status(202).json({
+            success: false,
+            message: 'Error file not uploaded'
+          }) 
+          // console.log('atta')
+        }
+      })
+    }
+    storedFiles.push('http://'+process.env.PGHOST+':'+process.env.PORT+'/images/'+file.name)
+  }
+   res.status(200).json({ success: true, files: await storedFiles })
 })

@@ -24,6 +24,6 @@ router
 
 router
   .route("/house/:id")
-  .get(protect, getHouseComments);
+  .get(getHouseComments);
 
 module.exports = router;

@@ -59,6 +59,14 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
   
   if (error) return next(new ErrorReponse(error.details[0].message, 400))
 
+  const existUser = await Users.findByEmail(email)
+  if (existUser.rowCount > 0) {
+    res
+    .status(200)
+    .json({ success: false, data: null, message: 'email already exist' })
+    return;
+  }
+
   const user = new Users(
     null,
     lastname,

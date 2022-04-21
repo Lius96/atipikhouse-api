@@ -20,17 +20,14 @@ exports.protect = asyncHander(async (req, res, next) => {
   try {
     // Verify token
    
-    const {
-      rows
-    } = await pool.query("SELECT * FROM users WHERE login_session_token=$1", [
+    const result = await pool.query("SELECT * FROM users WHERE login_session_token=$1", [
       token
     ]);
     
-    if (rows.rowCount === 0) return next(new ErrorResponse("Not authorize to access this route", 401));
-    req.user = rows.rows[0];
+    if (result.rowsCount === 0) return next(new ErrorResponse("Not authorize to access this route", 401));
+    req.user = result.rows[0];
     next();
   } catch (err) {
-   
     return next(new ErrorResponse("Not authorize to access this route", 401));
   }
 });

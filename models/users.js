@@ -71,6 +71,10 @@ class Users {
     return pool.query("SELECT * FROM users WHERE id=$1", [id]);
   }
 
+  static findByEmail(email){
+    return pool.query("SELECT * FROM users WHERE email=$1", [email]);
+  }
+
   static getAll() {
     return pool.query("SELECT * FROM users ORDER BY last_name DESC");
   }
