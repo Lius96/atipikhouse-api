@@ -122,7 +122,7 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
     price,
     photos,
     user_id,
-    off_days, } = req.body
+    off_days } = req.body
   const id = req.params.id
 
   const { error } = createHouseValidation(req.body)

@@ -96,7 +96,7 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.editUser = asyncHandler(async (req, res, next) => {
-  const { lastname, firstname, address, phone, social_link } = req.body
+  const { lastname, firstname, address, phone, social_link, grade } = req.body
   const id = req.params.id
 
   const { error } = updateUserValidation(req.body)
@@ -109,7 +109,7 @@ exports.editUser = asyncHandler(async (req, res, next) => {
   }
 
   const user = new Users(
-    id, lastname, firstname, null, address, phone, social_link, null, moment().unix() 
+    id, lastname, firstname, null, address, phone, social_link, null, moment().unix(), null, null, grade
   )
 
   const result = await user.save()
