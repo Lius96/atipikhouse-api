@@ -18,7 +18,7 @@ const createUserValidation = (data) => {
     firstname: Joi.string().min(3).required(),
     email: Joi.string().email(),
     address: Joi.string().min(3),
-    phone: Joi.string().min(10),
+    phone: Joi.string().min(6),
     social_link: Joi.object(),
     password: Joi.string().min(6).required(),
     grade: Joi.string()
@@ -32,7 +32,7 @@ const updateUserValidation = (data) => {
     lastname: Joi.string().min(3).required(),
     firstname: Joi.string().min(3).required(),
     address: Joi.string().min(3),
-    phone: Joi.string().min(10),
+    phone: Joi.string().min(6),
     social_link: Joi.object(),
     grade: Joi.string()
   });

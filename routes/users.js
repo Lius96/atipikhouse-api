@@ -9,7 +9,8 @@ const {
     creatUser,
     editUser,
     getUsers,
-    deleteUser
+    deleteUser,
+    updateUserPass
 } = require("../controllers/users");
 
 router
@@ -22,5 +23,9 @@ router
   .get(getUser)
   .put(protect, editUser)
   .delete(protect, deleteUser);
+
+router
+  .route("/pass/:id")
+  .put(protect, updateUserPass);
 
 module.exports = router;

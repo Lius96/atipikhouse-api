@@ -141,3 +141,29 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({ success: true, data: id })
 })
+
+/**
+ * @desc    update user password 
+ * @route   PUT /api/v1/users/pass/:id
+ * @access  Private
+ */
+
+ exports.updateUserPass = asyncHandler(async (req, res, next) => {
+  const id = req.params.id
+
+  const { password } = req.body
+
+  if(_.isUndefined(password)) return next(new ErrorReponse(`password is required`, 400))
+
+  const existUser = await Users.findById(id)
+
+  if (existUser.rowCount == 0) {
+    return next(new ErrorReponse(`User not found with id of ${id}`, 400))
+  }
+
+  const result = await Users.updatePass(id, getHashedPassword(password))
+  if (!result) {
+    return next(new ErrorReponse(`Cannot update password`, 404))
+  }
+  res.status(200).json({ success: true, data: id })
+})

@@ -36,7 +36,7 @@ class Users {
   save() {
     if (this.id) {
       return pool.query(
-        "UPDATE users SET last_name=$1, first_name=$2, address=$3, phone=$4, social_link=$5, updated_date=$6, password=$7, grade=$8 WHERE id=$9 RETURNING id",
+        "UPDATE users SET last_name=$1, first_name=$2, address=$3, phone=$4, social_link=$5, updated_date=$6, grade=$7 WHERE id=$8 RETURNING id",
         [
           this.last_name,
           this.first_name,
@@ -69,6 +69,16 @@ class Users {
 
   static findById(id) {
     return pool.query("SELECT * FROM users WHERE id=$1", [id]);
+  }
+
+  static updatePass(id, password){
+    return pool.query(
+      "UPDATE users SET password=$1 WHERE id=$2 RETURNING id",
+      [
+        password,
+        id
+      ]
+    );
   }
 
   static findByEmail(email){
