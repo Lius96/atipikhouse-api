@@ -111,7 +111,7 @@ const createBookingValidation = (data) => {
 
 const sendMailValidation = (data) => {
   const schema = Joi.object({
-    from: Joi.string().required(),
+    from: Joi.string(),
     to: Joi.string().required(),
     subject: Joi.string().required(),
     body: Joi.string().required(),

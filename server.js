@@ -52,14 +52,18 @@ app.use('/api/v1/mail/', mail);
 const port = process.env.PORT || 4000
 
 
-app.listen(port, () => {
-  console.log(`We are live on port ${port}`.yellow) 
-})
-// const httpsServer = https.createServer({
-//   key: fs.readFileSync('/etc/letsencrypt/live/f2i-dev26-dj.fr//privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/f2i-dev26-dj.fr//fullchain.pem'),
-// }, app);
+if(process.env.ENV === 'development'){
+  app.listen(port, () => {
+    console.log(`We are live on port ${port}`.yellow) 
+  })
+}else{
+  const httpsServer = https.createServer({
+    key: fs.readFileSync('/etc/letsencrypt/live/f2i-dev26-dj.fr//privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/f2i-dev26-dj.fr//fullchain.pem'),
+  }, app);
+  
+  httpsServer.listen(port, () => {
+    console.log(`We are live on port ${port}`.yellow)
+  })
+}
 
-// httpsServer.listen(port, () => {
-//   console.log(`We are live on port ${port}`.yellow)
-// })

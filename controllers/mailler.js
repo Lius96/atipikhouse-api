@@ -7,12 +7,15 @@ const { sendMailValidation } = require('../utils/validations')
 
 const transporter = nodemailer.createTransport(
   smtpTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
+    host: "ex5.mail.ovh.net",
+    port: 587,
     auth: {
       user: process.env.MAILUSER,
       pass: process.env.MAILPASS,
     },
+    tls: {
+      rejectUnauthorized: process.env.ENV == 'production'? true : false
+  }
   })
 );
 
@@ -26,7 +29,7 @@ exports.sendMail = asyncHandler(async (req, res, next) => {
   const { error } = sendMailValidation(req.body)
   if (error) return next(new ErrorReponse(error.details[0].message, 404))
   var mailOptions = {
-    from,
+    from: from ? from + '<atypikhouse@f2i-dev26-dj.fr>' : 'No-reply <atypikhouse@f2i-dev26-dj.fr>',
     to,
     subject,
     text: body,
