@@ -10,7 +10,9 @@ const {
     editUser,
     getUsers,
     deleteUser,
-    updateUserPass
+    updateUserPass,
+    getUserByEmail,
+    confirmedUser
 } = require("../controllers/users");
 
 router
@@ -25,7 +27,15 @@ router
   .delete(protect, deleteUser);
 
 router
+  .route("/pass")
+  .post(getUserByEmail)
+
+router
   .route("/pass/:id")
   .put(protect, updateUserPass);
+
+router
+  .route('/confirmation/:token')
+  .put(confirmedUser)
 
 module.exports = router;

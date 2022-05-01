@@ -81,8 +81,22 @@ class Users {
     );
   }
 
+  static updateConfirmation(id){
+    return pool.query(
+      "UPDATE users SET confirmation_token=$1 WHERE id=$2 RETURNING id",
+      [
+        null,
+        id
+      ]
+    );
+  }
+
   static findByEmail(email){
     return pool.query("SELECT * FROM users WHERE email=$1", [email]);
+  }
+
+  static findByToken(token){
+    return pool.query("SELECT * FROM users WHERE confirmation_token=$1", [token])
   }
 
   static getAll() {

@@ -24,7 +24,6 @@ exports.getUser= asyncHandler(async (req, res, next) => {
   }  
 })
 
-
 /**
  * @desc   Get All users
  * @route   GET /api/v1/user/
@@ -166,4 +165,44 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorReponse(`Cannot update password`, 404))
   }
   res.status(200).json({ success: true, data: id })
+})
+
+/**
+ * @desc   Get single user
+ * @route   POST /api/v1/user/pass
+ * @access  Private
+ */
+ exports.getUserByEmail= asyncHandler(async (req, res, next) => {
+
+  if(_.isUndefined(req.body.email)) return next(new ErrorReponse(`User not found with this email`, 400))
+
+  const result = await Users.findByEmail(req.body.email)
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `User not found with this email`})
+  }else{
+    res.status(200).json({ success: true, data: result.rows[0] })
+  }  
+})
+
+
+/**
+ * @desc   Get single user
+ * @route   PUT /api/v1/user/confirmation/:id
+ * @access  Private
+ */
+ exports.confirmedUser= asyncHandler(async (req, res, next) => {
+  if (!req.params.token) return next(new ErrorReponse('token is required', 400));
+  const user_token = req.params.token
+
+  const result = await Users.findByToken(user_token)
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `User not found with this token`})
+  }else{
+    const confirmed = await Users.updateConfirmation(result.rows[0].id)
+    if (confirmed.rowCount !== 0) {
+      res.status(200).json({ success: true, data: result.rows[0] })
+    }else{
+      res.status(200).json({ success: false,  message: `Confirmation not valid`})
+    }
+  }  
 })
