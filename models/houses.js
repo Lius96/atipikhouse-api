@@ -16,6 +16,7 @@ class Houses {
     updated_by,
     off_days,
     updated_date,
+    location,
   ) {
     this.id = id;
     this.title = title;
@@ -26,6 +27,7 @@ class Houses {
     this.capacity = capacity;
     this.price = price;
     this.photos = photos;
+    this.location = location;
     this.created_by = created_by;
     this.created_date = created_date;
     this.updated_by = updated_by;
@@ -40,7 +42,7 @@ class Houses {
   save() {
     if (this.id) {
       return pool.query(
-        "UPDATE houses SET title=$1, description=$2, status=$3, type=$4, nbr_couchage=$5, capacity=$6, price=$7, photos=$8, updated_by=$9, off_days=$10, updated_date=$11  WHERE id=$12 RETURNING id",
+        "UPDATE houses SET title=$1, description=$2, status=$3, type=$4, nbr_couchage=$5, capacity=$6, price=$7, photos=$8, updated_by=$9, off_days=$10, updated_date=$11, location=$12  WHERE id=$13 RETURNING id",
         [
             
             this.title,
@@ -54,12 +56,13 @@ class Houses {
             this.updated_by,
             this.off_days,
             this.updated_date,
+            this.location,
             this.id,
         ]
       );
     } else {
       return pool.query(
-        "INSERT INTO houses (title, description, status, type, nbr_couchage, capacity, price, photos, created_by, created_date, off_days) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id",
+        "INSERT INTO houses (title, description, status, type, nbr_couchage, capacity, price, photos, created_by, created_date, off_days, location, notify) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id",
         [
             this.title,
             this.description,
@@ -72,6 +75,8 @@ class Houses {
             this.created_by,
             this.created_date,
             this.off_days,
+            this.location,
+            true
         ]
       );
     }
@@ -87,6 +92,16 @@ class Houses {
 
   static getAll() {
     return pool.query("SELECT houses.*, users.first_name, users.last_name FROM houses INNER JOIN users ON houses.created_by = users.id ORDER BY title DESC");
+  }
+
+  static updateNotify(id, notify=false) {
+    return pool.query(
+      "UPDATE houses SET notify=$1  WHERE id=$2 RETURNING id",
+      [
+          notify,
+          id
+      ]
+    );
   }
 
   static deleteById(id) {

@@ -51,6 +51,7 @@ const createHouseValidation = (data) => {
     price: Joi.string().required(),
     photos: Joi.object(),
     off_days: Joi.object(),
+    location: Joi.string(),
     user_id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
   });
 

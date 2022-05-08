@@ -11,7 +11,8 @@ const {
     getHouses,
     deleteHouse,
     getAuthorHouses,
-    uploadFiles
+    uploadFiles,
+    editHouseNotify
 } = require("../controllers/houses");
 
 router
@@ -24,6 +25,11 @@ router
   .get(getHouse)
   .put(protect, editHouse)
   .delete(protect, deleteHouse);
+
+
+router
+  .route("/notification/:id")
+  .put(protect, editHouseNotify)
 
 router
   .route("/author/:id")

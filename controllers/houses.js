@@ -75,6 +75,7 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
     photos,
     user_id,
     off_days,
+    location,
     } = req.body
   const { error } = createHouseValidation(req.body)
   
@@ -96,7 +97,9 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
     user_id,
     moment().unix(),
     null,
-    off_days
+    off_days,
+    null,
+    location
   )
   const result = await house.save()
   if (result) {
@@ -122,7 +125,7 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
     price,
     photos,
     user_id,
-    off_days } = req.body
+    off_days, location } = req.body
   const id = req.params.id
 
   const { error } = createHouseValidation(req.body)
@@ -149,9 +152,35 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
     user_id,
     off_days,
     moment().unix(),
+    location
   )
 
   const result = await house.save()
+
+  if (result) {
+    res
+      .status(200)
+      .json({ success: true, data: result.rows[0].id })
+  }
+})
+
+/**
+ * @desc    Edit house notification
+ * @route   PUT /api/v1/houses/notification/:id
+ * @access  Private
+ */
+ exports.editHouseNotify = asyncHandler(async (req, res, next) => {
+  if (_.isUndefined(req.body.notification) || !_.isBoolean(req.body.notification)) return next(new ErrorReponse('notification is required', 404))
+  const { notification } = req.body
+  const id = req.params.id
+  
+  const existHouse = await Houses.findById(id)
+
+  if (existHouse.rowCount == 0) {
+    return next(new ErrorReponse(`House not found with id of ${id}`, 404))
+  }
+
+  const result = await Houses.updateNotify(id, notification)
 
   if (result) {
     res
