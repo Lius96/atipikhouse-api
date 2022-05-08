@@ -206,7 +206,7 @@ exports.uploadFiles = asyncHandler(async (req, res, next) => {
         }
       })
     }
-    storedFiles.push('http://'+process.env.PGHOST+':'+process.env.PORT+'/images/'+file.name)
+    storedFiles.push('https://'+process.env.IMGHOST+':'+process.env.PORT+'/images/'+file.name)
   }
    res.status(200).json({ success: true, files: await storedFiles })
 })
