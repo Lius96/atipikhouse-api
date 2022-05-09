@@ -8,6 +8,7 @@ const { getHashedPassword, encodeString } = require('../utils/helpers')
 
 
 /**
+ * 
  * @desc   Get single user
  * @route   GET /api/v1/user/:id
  * @access  Private

@@ -83,15 +83,15 @@ class Houses {
   }
 
   static findById(id) {
-    return pool.query("SELECT houses.*, users.first_name, users.last_name FROM houses INNER JOIN users ON houses.created_by = users.id WHERE houses.id=$1", [id]);
+    return pool.query("SELECT houses.*, users.first_name, users.last_name, users.email, users.address, users.phone, users.social_link FROM houses INNER JOIN users ON houses.created_by = users.id WHERE houses.id=$1", [id]);
   }
 
   static findByAuthor (id){
-    return pool.query("SELECT houses.*, users.first_name, users.last_name FROM houses INNER JOIN users ON houses.created_by = users.id WHERE houses.created_by = $1", [id])
+    return pool.query("SELECT houses.*, users.first_name, users.last_name, users.email, users.address, users.phone, users.social_link FROM houses INNER JOIN users ON houses.created_by = users.id WHERE houses.created_by = $1", [id])
   }
 
   static getAll() {
-    return pool.query("SELECT houses.*, users.first_name, users.last_name FROM houses INNER JOIN users ON houses.created_by = users.id ORDER BY title DESC");
+    return pool.query("SELECT houses.*, users.first_name, users.last_name, users.email, users.address, users.phone, users.social_link FROM houses INNER JOIN users ON houses.created_by = users.id ORDER BY title DESC");
   }
 
   static updateNotify(id, notify=false) {
