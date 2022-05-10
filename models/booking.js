@@ -49,19 +49,19 @@ class Booking {
   }
 
   static findById (id){
-    return pool.query("SELECT * FROM booking WHERE id=$1", [id])
+    return pool.query("SELECT *, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE id=$1", [id])
   }
 
   static findByAuthor (id){
-    return pool.query("SELECT booking.*, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.reserved_by = $1 ORDER BY booking.start_date DESC", [id])
+    return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.reserved_by = $1 ORDER BY booking.start_date DESC", [id])
   }
 
   static findByHouse (id){
-    return pool.query("SELECT booking.*, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.house = $1 ORDER BY booking.start_date DESC", [id])
+    return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.house = $1 ORDER BY booking.start_date DESC", [id])
   }
 
   static getAll() {
-    return pool.query("SELECT booking.*, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id ORDER BY booking.start_date DESC");
+    return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id ORDER BY booking.start_date DESC");
   }
 
   static deleteById(id) {
