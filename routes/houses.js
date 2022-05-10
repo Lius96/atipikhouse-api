@@ -12,7 +12,8 @@ const {
     deleteHouse,
     getAuthorHouses,
     uploadFiles,
-    editHouseNotify
+    editHouseNotify,
+    getAuthorBookedHouses
 } = require("../controllers/houses");
 
 router
@@ -34,6 +35,10 @@ router
 router
   .route("/author/:id")
   .get(protect, getAuthorHouses);
+
+router
+  .route("/booked/author/:id")
+  .get(protect, getAuthorBookedHouses);
 
 
 router

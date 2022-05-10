@@ -90,6 +90,10 @@ class Houses {
     return pool.query("SELECT houses.*, users.first_name, users.last_name, users.email, users.address, users.phone, users.social_link FROM houses INNER JOIN users ON houses.created_by = users.id WHERE houses.created_by = $1", [id])
   }
 
+  static findHousesBookedByAuthor (id){
+    return pool.query("SELECT booking.*, houses.*, users.first_name, users.last_name, users.email, users.address, users.phone, users.social_link FROM booking INNER JOIN houses ON booking.house = houses.id INNER JOIN users ON houses.created_by = users.id WHERE houses.created_by = $1 ORDER BY booking.start_date DESC", [id])
+  }
+
   static getAll() {
     return pool.query("SELECT houses.*, users.first_name, users.last_name, users.email, users.address, users.phone, users.social_link FROM houses INNER JOIN users ON houses.created_by = users.id ORDER BY title DESC");
   }

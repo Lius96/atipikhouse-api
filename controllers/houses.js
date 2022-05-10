@@ -58,6 +58,23 @@ exports.getAuthorHouses= asyncHandler(async (req, res, next) => {
   }  
 })
 
+
+/**
+ * @desc   Get All booked houses of author
+ * @route   GET /api/v1/houses/booked/author/:id
+ * @access  Private
+ */
+exports.getAuthorBookedHouses= asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
+  const id = req.params.id;
+  const result = await Houses.findHousesBookedByAuthor(id)
+  if (result.rowCount === 0) {
+    res.status(200).json({ success: false,  message: `Houses is empty for author ${id}`})
+  }else{
+    res.status(200).json({ success: true, data: result.rows })
+  }  
+})
+
 /**
  * @desc    Create house
  * @route   POST /api/v1/houses/
@@ -219,7 +236,6 @@ exports.uploadFiles = asyncHandler(async (req, res, next) => {
       message: 'Error file not uploaded'
     })
   }
- 
 
   for (let i = 0; i < Object.keys(req.files).length; i++) {
     let file = req.files['images'+i];
