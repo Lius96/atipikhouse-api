@@ -35,7 +35,7 @@ class Booking {
       );
     } else {
       return pool.query(
-        "INSERT INTO boooking (price, start_date, end_date, reserved_by, reserved_names, house) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+        "INSERT INTO booking (price, start_date, end_date, reserved_by, reserved_names, house) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
         [
             this.price,
             this.start_date,
