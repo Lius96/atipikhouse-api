@@ -58,7 +58,7 @@ class Comments {
   }
 
   static getAll() {
-    return pool.query("SELECT comments.*, users.first_name, users.last_name FROM comments INNER JOIN users ON comments.created_by = users.id ORDER BY comments.created_date DESC");
+    return pool.query("SELECT comments.*, users.first_name, users.last_name, houses.title FROM comments INNER JOIN users ON comments.created_by = users.id INNER JOIN houses ON comments.house = houses.id ORDER BY comments.created_date DESC");
   }
 
   static deleteById(id) {

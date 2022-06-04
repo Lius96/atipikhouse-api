@@ -7,6 +7,7 @@ const { protect } = require("../middleware/auth");
 const {
     createComments,
     editComment,
+    getComment,
     getHouseComments,
     deleteComment,
     getComments
@@ -19,6 +20,7 @@ router
 
 router
   .route("/:id")
+  .get(getComment)
   .put(protect, editComment)
   .delete(protect, deleteComment);
 

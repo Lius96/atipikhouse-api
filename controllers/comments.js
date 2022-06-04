@@ -23,6 +23,22 @@ exports.getComments= asyncHandler(async (req, res) => {
 
 
 /**
+ * @desc   Get comment 
+ * @route   GET /api/v1/comments/:id
+ * @access  Private
+ */
+exports.getComment= asyncHandler(async (req, res) => {
+  if (!req.params.id) return next(new ErrorReponse('id is required', 400));
+  const id = req.params.id;
+  const result = await Comments.findById(id)
+  if (result.rowCount == 0) {
+    res.status(200).json({ success: false,  message: `comment is empty for id ${id}`})
+  }else{
+    res.status(200).json({ success: true, data: result.rows[0] })
+  }  
+})
+
+/**
  * @desc   Get All comments by house
  * @route   GET /api/v1/comments/house/:id
  * @access  Private
