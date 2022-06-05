@@ -10,7 +10,8 @@ const {
     getHouseBooking,
     deleteBooking,
     createBooking,
-    editBooking
+    editBooking,
+    createIntentment
 } = require("../controllers/booking");
 
 router
@@ -30,5 +31,9 @@ router
 router
   .route("/house/:id")
   .get(protect, getHouseBooking);
+
+router
+  .route("/payintentment/")
+  .post(protect, createIntentment);
 
 module.exports = router;

@@ -148,6 +148,16 @@ const updatePagesValidation = (data) => {
   return schema.validate(data);
 };
 
+const paymentsIntentmentValidation = (data) => {
+  const schema = Joi.object({
+    amount: Joi.number().required(),
+    currency: Joi.string(),
+    paymentType: Joi.string(),
+  });
+
+  return schema.validate(data);
+};
+
 module.exports.createPortofolioValidation = createPortofolioValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.logoutValidation = logoutValidation;
@@ -161,3 +171,4 @@ module.exports.updateBookingValidation = updateBookingValidation;
 module.exports.createPagesValidation = createPagesValidation;
 module.exports.updatePagesValidation = updatePagesValidation;
 module.exports.sendMailValidation = sendMailValidation;
+module.exports.paymentsIntentmentValidation = paymentsIntentmentValidation;
