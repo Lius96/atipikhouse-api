@@ -1,17 +1,5 @@
 const Joi = require("@hapi/joi");
 
-const createPortofolioValidation = (data) => {
-  const schema = Joi.object({
-    title: Joi.string().min(3).required(),
-    descriptions: Joi.string().min(5),
-    images: Joi.object(),
-    token: Joi.string(),
-    portofolio_type: Joi.string(),
-  });
-
-  return schema.validate(data);
-};
-
 const createUserValidation = (data) => {
   const schema = Joi.object({
     lastname: Joi.string().min(3).required(),
@@ -50,7 +38,7 @@ const createHouseValidation = (data) => {
     capacity: Joi.string(),
     price: Joi.string().required(),
     photos: Joi.object(),
-    off_days: Joi.object(),
+    off_days: Joi.array().items(Joi.number()),
     location: Joi.string(),
     user_id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
   });
@@ -158,7 +146,6 @@ const paymentsIntentmentValidation = (data) => {
   return schema.validate(data);
 };
 
-module.exports.createPortofolioValidation = createPortofolioValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.logoutValidation = logoutValidation;
 module.exports.createUserValidation = createUserValidation;
