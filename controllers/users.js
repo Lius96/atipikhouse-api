@@ -53,7 +53,9 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
     phone,
     social_link,
     password,
-    grade
+    grade,
+    city,
+    country
     } = req.body
   const { error } = createUserValidation(req.body)
   
@@ -79,7 +81,9 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
     null,
     getHashedPassword(password),
     encodeString(email),
-    grade
+    grade,
+    city, 
+    country
   )
   const result = await user.save()
   if (result) {
@@ -96,7 +100,7 @@ exports.creatUser = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.editUser = asyncHandler(async (req, res, next) => {
-  const { lastname, firstname, address, phone, social_link, grade } = req.body
+  const { lastname, firstname, address, phone, social_link, grade, city, country } = req.body
   const id = req.params.id
 
   const { error } = updateUserValidation(req.body)
@@ -109,7 +113,7 @@ exports.editUser = asyncHandler(async (req, res, next) => {
   }
 
   const user = new Users(
-    id, lastname, firstname, null, address, phone, social_link, null, moment().unix(), null, null, grade
+    id, lastname, firstname, null, address, phone, social_link, null, moment().unix(), null, null, grade, city, country
   )
 
   const result = await user.save()

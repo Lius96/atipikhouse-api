@@ -108,6 +108,16 @@ class Houses {
     );
   }
 
+  static updateHouseOffDays(id, offDays) {
+    return pool.query(
+      "UPDATE houses SET off_days=$1  WHERE id=$2 RETURNING id",
+      [
+          offDays,
+          id
+      ]
+    );
+  }
+
   static deleteById(id) {
     return pool.query("DELETE FROM houses WHERE id=$1", [id]);
   }

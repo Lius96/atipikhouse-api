@@ -9,6 +9,7 @@ class Booking {
     reserved_by,
     house,
     reserved_names,
+    billing_details,
   ) {
     this.id = id;
     this.price = price;
@@ -17,6 +18,7 @@ class Booking {
     this.reserved_by = reserved_by;
     this.reserved_names = reserved_names;
     this.house = house;
+    this.billing_details = billing_details
   }
 
   static clientPool() {
@@ -35,7 +37,7 @@ class Booking {
       );
     } else {
       return pool.query(
-        "INSERT INTO booking (price, start_date, end_date, reserved_by, reserved_names, house) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
+        "INSERT INTO booking (price, start_date, end_date, reserved_by, reserved_names, house, billing_details) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
         [
             this.price,
             this.start_date,
@@ -43,6 +45,7 @@ class Booking {
             this.reserved_by,
             this.reserved_names,
             this.house,
+            this.billing_details,
         ]
       );
     }

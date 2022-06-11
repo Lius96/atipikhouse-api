@@ -1,8 +1,9 @@
 const Booking = require("../models/booking");
+const Houses = require("../models/houses");
 const _ = require("underscore");
 const asyncHandler = require("../middleware/async");
 const moment = require("moment");
-const Stripe = require('stripe')
+const Stripe = require("stripe");
 const ErrorReponse = require("../utils/errorResponse");
 const {
   createBookingValidation,
@@ -66,8 +67,15 @@ exports.getAuthorBooking = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 exports.createBooking = asyncHandler(async (req, res, next) => {
-  const { price, start_date, end_date, house, user_id, reserved_names } =
-    req.body;
+  const {
+    price,
+    start_date,
+    end_date,
+    house,
+    user_id,
+    reserved_names,
+    billing_details,
+  } = req.body;
   const { error } = createBookingValidation(req.body);
 
   if (error) return next(new ErrorReponse(error.details[0].message, 400));
@@ -79,11 +87,16 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     end_date,
     user_id,
     house,
-    reserved_names
+    reserved_names,
+    billing_details
   );
   const result = await booking.save();
   if (result) {
-    res.status(200).json({ success: true, data: result.rows[0].id });
+    if (await updateHouseOffDays(house, start_date, end_date)) {
+      res.status(200).json({ success: true, data: result.rows[0].id });
+    } else {
+      res.status(200).json({ success: true, data: result.rows[0].id, msg: "" });
+    }
   }
 });
 
@@ -111,7 +124,11 @@ exports.editBooking = asyncHandler(async (req, res, next) => {
   const result = await booking.save();
 
   if (result) {
-    res.status(200).json({ success: true, data: result.rows[0].id });
+    if (await updateHouseOffDays(id, start_date, end_date)) {
+      res.status(200).json({ success: true, data: result.rows[0].id });
+    } else {
+      res.status(200).json({ success: true, data: result.rows[0].id, msg: "" });
+    }
   }
 });
 
@@ -151,9 +168,45 @@ exports.createIntentment = asyncHandler(async (req, res, next) => {
     payment_method_types: [paymentType],
   });
 
-  if(!paymentIntent.id || !paymentIntent.client_secret){
+  if (!paymentIntent.id || !paymentIntent.client_secret) {
     return next(new ErrorReponse(`Error with payment. retry later`, 400));
-  }else{
+  } else {
     res.status(200).json({ success: true, data: paymentIntent.client_secret });
-  }  
+  }
 });
+
+function getDatesInRange(startDate, endDate) {
+  let startConv = new Date(startDate *1000),
+  endConv = new Date(endDate* 1000);
+  const date = new Date(startConv.getTime());
+
+  const dates = [];
+
+  while (date <= endConv) {
+    dates.push(parseInt(date.getTime() / 1000));
+    date.setDate(date.getDate() + 1);
+  }
+  return dates;
+}
+
+async function updateHouseOffDays(houseId, start, end) {
+  const existHouse = await Houses.findById(houseId);
+  if (existHouse.rowCount == 0) {
+    return false;
+  }
+
+  let oldOffDays = await existHouse.rows[0].off_days;
+
+  let reservedDates = await getDatesInRange(start, end);
+
+  let newOffDays = [];
+
+  if (reservedDates.length > 0) {
+    newOffDays = _.union(oldOffDays, reservedDates);
+  }
+  
+  const result = await Houses.updateHouseOffDays(houseId, newOffDays);
+  if (result.rowCount != 0) {
+    return true;
+  }
+}

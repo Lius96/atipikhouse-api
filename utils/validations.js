@@ -9,7 +9,9 @@ const createUserValidation = (data) => {
     phone: Joi.string().min(6),
     social_link: Joi.object(),
     password: Joi.string().min(6).required(),
-    grade: Joi.string()
+    grade: Joi.string().required,
+    city: Joi.string(),
+    country: Joi.string(),
   });
 
   return schema.validate(data);
@@ -92,7 +94,8 @@ const createBookingValidation = (data) => {
     end_date: Joi.number().required(),
     house: Joi.number().required(),
     user_id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
-    reserved_names: Joi.string()
+    reserved_names: Joi.string(),
+    billing_details: Joi.object(),
   });
 
   return schema.validate(data);
