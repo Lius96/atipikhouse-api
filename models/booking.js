@@ -10,6 +10,7 @@ class Booking {
     house,
     reserved_names,
     billing_details,
+    created_at
   ) {
     this.id = id;
     this.price = price;
@@ -19,6 +20,7 @@ class Booking {
     this.reserved_names = reserved_names;
     this.house = house;
     this.billing_details = billing_details
+    this.created_at = created_at
   }
 
   static clientPool() {
@@ -37,7 +39,7 @@ class Booking {
       );
     } else {
       return pool.query(
-        "INSERT INTO booking (price, start_date, end_date, reserved_by, reserved_names, house, billing_details) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
+        "INSERT INTO booking (price, start_date, end_date, reserved_by, reserved_names, house, billing_details, created_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id",
         [
             this.price,
             this.start_date,
@@ -46,6 +48,7 @@ class Booking {
             this.reserved_names,
             this.house,
             this.billing_details,
+            this.created_at
         ]
       );
     }
@@ -57,6 +60,10 @@ class Booking {
 
   static findByAuthor (id){
     return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.reserved_by = $1 ORDER BY booking.start_date DESC", [id])
+  }
+
+  static findByOwer (id){
+    return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE houses.created_by = $1 ORDER BY booking.start_date DESC", [id])
   }
 
   static findByHouse (id){

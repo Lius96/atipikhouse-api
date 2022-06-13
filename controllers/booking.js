@@ -43,6 +43,25 @@ exports.getHouseBooking = asyncHandler(async (req, res, next) => {
   }
 });
 
+
+/**
+ * @desc   Get All booking by owner
+ * @route   GET /api/v1/booking/owner/:id
+ * @access  Private
+ */
+exports.getOwnerBooking = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse("id is required", 400));
+  const id = req.params.id;
+  const result = await Booking.findByOwer(id);
+  if (result.rowCount == 0) {
+    res
+      .status(200)
+      .json({ success: false, message: `booking is empty for owner ${id}` });
+  } else {
+    res.status(200).json({ success: true, data: result.rows });
+  }
+});
+
 /**
  * @desc   Get All booking by author
  * @route   GET /api/v1/booking/author/:id
@@ -88,7 +107,8 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     user_id,
     house,
     reserved_names,
-    billing_details
+    billing_details,
+    moment.unix(),
   );
   const result = await booking.save();
   if (result) {
