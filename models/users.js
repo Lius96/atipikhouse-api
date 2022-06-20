@@ -13,7 +13,9 @@ class Users {
     updated_date,
     password,
     confirmation_token,
-    grade
+    grade,
+    city,
+    country
   ) {
     this.id = id;
     this.last_name = last_name;
