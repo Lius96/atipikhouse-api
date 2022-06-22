@@ -109,6 +109,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     reserved_names,
     billing_details,
     moment().unix(),
+    
   );
   const result = await booking.save();
 
