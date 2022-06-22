@@ -108,9 +108,10 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     house,
     reserved_names,
     billing_details,
-    moment.unix(),
+    moment().unix(),
   );
   const result = await booking.save();
+
   if (result) {
     if (await updateHouseOffDays(house, start_date, end_date)) {
       res.status(200).json({ success: true, data: result.rows[0].id });
@@ -214,7 +215,7 @@ async function updateHouseOffDays(houseId, start, end) {
   if (existHouse.rowCount == 0) {
     return false;
   }
-
+  
   let oldOffDays = await existHouse.rows[0].off_days;
 
   let reservedDates = await getDatesInRange(start, end);
