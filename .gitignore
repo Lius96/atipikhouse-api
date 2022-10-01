@@ -5,3 +5,4 @@ db.sql
 .vscode
 
 uploads/*
+config/config.env
