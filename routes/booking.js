@@ -12,7 +12,9 @@ const {
     createBooking,
     editBooking,
     createIntentment,
-    getOwnerBooking
+    getOwnerBooking,
+    editBookingStatus,
+    getBooking
 } = require("../controllers/booking");
 
 router
@@ -22,12 +24,17 @@ router
 
 router
   .route("/:id")
+  .get(protect, getBooking)
   .put(protect, editBooking)
   .delete(protect, deleteBooking);
 
 router
   .route("/author/:id")
   .get(protect, getAuthorBooking);
+
+router
+  .route("/status/:id")
+  .put(protect, editBookingStatus);
 
 router
   .route("/house/:id")

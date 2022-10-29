@@ -10,7 +10,8 @@ class Booking {
     house,
     reserved_names,
     billing_details,
-    created_at
+    created_at,
+    status
   ) {
     this.id = id;
     this.price = price;
@@ -21,6 +22,7 @@ class Booking {
     this.house = house;
     this.billing_details = billing_details
     this.created_at = created_at
+    this.status = status
   }
 
   static clientPool() {
@@ -48,14 +50,15 @@ class Booking {
             this.reserved_names,
             this.house,
             this.billing_details,
-            this.created_at
+            this.created_at,
+            !this.status && this.status !='' ? this.status : 'pending' 
         ]
       );
     }
   }
 
   static findById (id){
-    return pool.query("SELECT *, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE id=$1", [id])
+    return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.id=$1", [id])
   }
 
   static findByAuthor (id){
@@ -68,6 +71,14 @@ class Booking {
 
   static findByHouse (id){
     return pool.query("SELECT booking.*, houses.photos, users.first_name, users.last_name, houses.title FROM booking INNER JOIN users ON booking.reserved_by = users.id INNER JOIN houses ON booking.house = houses.id WHERE booking.house = $1 ORDER BY booking.start_date DESC", [id])
+  }
+
+  static updateStatus(id, status){
+    return pool.query(
+      "UPDATE booking SET status=$1  WHERE id=$2 RETURNING id", [
+        status,
+        id
+      ])
   }
 
   static getAll() {

@@ -26,6 +26,25 @@ exports.getBookings = asyncHandler(async (req, res) => {
 });
 
 /**
+ * @desc   Get  booking by id
+ * @route   GET /api/v1/booking/:id
+ * @access  Private
+ */
+exports.getBooking = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse("id is required", 400));
+  const id = req.params.id;
+
+  const result = await Booking.findById(id);
+  if (result.rowCount == 0) {
+    res
+      .status(200)
+      .json({ success: false, message: `booking is empty for id ${id}` });
+  } else {
+    res.status(200).json({ success: true, data: result.rows });
+  }
+});
+
+/**
  * @desc   Get All booking by house
  * @route   GET /api/v1/booking/house/:id
  * @access  Private
@@ -151,6 +170,32 @@ exports.editBooking = asyncHandler(async (req, res, next) => {
     } else {
       res.status(200).json({ success: true, data: result.rows[0].id, msg: "" });
     }
+  }
+});
+
+
+/**
+ * @desc    Edit booking status
+ * @route   PUT /api/v1/booking/status/:id
+ * @access  Private
+ */
+exports.editBookingStatus = asyncHandler(async (req, res, next) => {
+  if (!req.params.id) return next(new ErrorReponse("id is required", 400));
+  const { status } = req.body;
+  const id = req.params.id;
+
+  if (!req.body.status) return next(new ErrorReponse("status is required", 400));
+  
+  const existbooking = await Booking.findById(id);
+
+  if (existbooking.rowCount == 0) {
+    return next(new ErrorReponse(`Booking not found with id of ${id}`, 404));
+  }
+  
+  const result = Booking.updateStatus(id, status);
+
+  if (result) {
+    res.status(200).json({ success: true, data: result });
   }
 });
 
