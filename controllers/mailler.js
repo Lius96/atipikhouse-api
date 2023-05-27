@@ -7,7 +7,7 @@ const { sendMailValidation } = require('../utils/validations')
 
 const transporter = nodemailer.createTransport(
   smtpTransport({
-    host: "ex5.mail.ovh.net",
+    host: process.env.MAILHOST,
     port: 587,
     auth: {
       user: process.env.MAILUSER,
