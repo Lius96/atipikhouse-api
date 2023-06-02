@@ -130,7 +130,7 @@ exports.createBooking = asyncHandler(async (req, res, next) => {
     moment().unix(),
     
   );
-  const result = await booking.save();
+  const result = await booking.save();  
 
   if (result) {
     if (await updateHouseOffDays(house, start_date, end_date)) {
