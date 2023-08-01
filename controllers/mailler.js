@@ -29,7 +29,7 @@ exports.sendMail = asyncHandler(async (req, res, next) => {
   const { error } = sendMailValidation(req.body)
   if (error) return next(new ErrorReponse(error.details[0].message, 404))
   var mailOptions = {
-    from: from ? from + '<atypikhouse@f2i-dev26-dj.fr>' : 'No-reply <atypikhouse@f2i-dev26-dj.fr>',
+    from: from ? from + '<atypikhouse@f2i-dev26-jd.fr>' : 'No-reply <atypikhouse@f2i-dev26-jd.fr>',
     to,
     subject,
     text: body,
