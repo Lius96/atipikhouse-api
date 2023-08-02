@@ -25,7 +25,9 @@ const updateUserValidation = (data) => {
     address: Joi.string().min(3),
     phone: Joi.string().min(6),
     social_link: Joi.object(),
-    grade: Joi.string()
+    grade: Joi.string(),
+    city: Joi.string().empty(''),
+    country: Joi.string().empty(''),
   });
 
   return schema.validate(data);
