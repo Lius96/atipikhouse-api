@@ -6,12 +6,14 @@ const colors = require('colors')
 const morgan = require('morgan')
 const fileUpload = require('express-fileupload')
 const fs = require('fs')
+const path = require('path');
+
 
 const app = express()
 var cors = require('cors')
 app.use(cors())
 // app.use(express.static('public'))
-app.use('/images', express.static(__dirname + '/uploads/'))
+app.use('/images', express.static(path.resolve(__dirname + '/uploads')))
 app.use(fileUpload())
 
 app.post('/test', (req, res, next) => {
