@@ -100,7 +100,7 @@ exports.createComments = asyncHandler(async (req, res, next) => {
 exports.editComment = asyncHandler(async (req, res, next) => {
   const { content,
     status,
-    stars_number, } = req.body
+    stars_number } = req.body
   const id = req.params.id
 
   const { error } = updateCommentsValidation(req.body)

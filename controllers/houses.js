@@ -93,12 +93,12 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
     user_id,
     off_days,
     location,
+    equipements
     } = req.body
   const { error } = createHouseValidation(req.body)
   
   if (error) {
-    res.status(200).json({ success: false, message: error.details[0].message })
-    return;
+    return res.status(200).json({ success: false, message: error.details[0].message })
   }
 
   const house = new Houses(
@@ -116,7 +116,8 @@ exports.creatHouse = asyncHandler(async (req, res, next) => {
     null,
     off_days,
     null,
-    location
+    location,
+    equipements
   )
   const result = await house.save()
   if (result) {
@@ -142,7 +143,7 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
     price,
     photos,
     user_id,
-    off_days, location } = req.body
+    off_days, location, equipements } = req.body
   const id = req.params.id
 
   const { error } = createHouseValidation(req.body)
@@ -169,7 +170,8 @@ exports.editHouse = asyncHandler(async (req, res, next) => {
     user_id,
     off_days,
     moment().unix(),
-    location
+    location,
+    equipements
   )
 
   const result = await house.save()

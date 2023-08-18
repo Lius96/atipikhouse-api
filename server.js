@@ -37,6 +37,7 @@ const comments = require('./routes/comments')
 const booking = require('./routes/booking')
 const pages = require('./routes/pages')
 const mail = require('./routes/mailler')
+const equip = require('./routes/equipment')
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
@@ -50,6 +51,7 @@ app.use('/api/v1/comments/', comments);
 app.use('/api/v1/booking/', booking);
 app.use('/api/v1/pages/', pages);
 app.use('/api/v1/mail/', mail);
+app.use('/api/v1/equipment/', equip);
 
 const port = process.env.PORT || 4000
 

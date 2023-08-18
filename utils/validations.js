@@ -46,6 +46,7 @@ const createHouseValidation = (data) => {
     off_days: Joi.array().items(Joi.number()),
     location: Joi.string(),
     user_id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
+    equipements: Joi.array().items(Joi.object()).allow([], null)
   });
 
   return schema.validate(data);
@@ -134,6 +135,15 @@ const createPagesValidation = (data) => {
   return schema.validate(data);
 };
 
+const createEquipmentValidation = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    icon: Joi.string().allow(null, ''),
+  });
+
+  return schema.validate(data);
+};
+
 const updatePagesValidation = (data) => {
   const schema = Joi.object({
     content: Joi.object().required(),
@@ -165,3 +175,4 @@ module.exports.createPagesValidation = createPagesValidation;
 module.exports.updatePagesValidation = updatePagesValidation;
 module.exports.sendMailValidation = sendMailValidation;
 module.exports.paymentsIntentmentValidation = paymentsIntentmentValidation;
+module.exports.createEquipmentValidation = createEquipmentValidation;

@@ -17,6 +17,7 @@ class Houses {
     off_days,
     updated_date,
     location,
+    equipements
   ) {
     this.id = id;
     this.title = title;
@@ -33,6 +34,7 @@ class Houses {
     this.updated_by = updated_by;
     this.off_days = off_days;
     this.updated_date = updated_date;
+    this.equipements = equipements;
   }
 
   static clientPool() {
@@ -42,7 +44,7 @@ class Houses {
   save() {
     if (this.id) {
       return pool.query(
-        "UPDATE houses SET title=$1, description=$2, status=$3, type=$4, nbr_couchage=$5, capacity=$6, price=$7, photos=$8, updated_by=$9, off_days=$10, updated_date=$11, location=$12  WHERE id=$13 RETURNING id",
+        "UPDATE houses SET title=$1, description=$2, status=$3, type=$4, nbr_couchage=$5, capacity=$6, price=$7, photos=$8, updated_by=$9, off_days=$10, updated_date=$11, location=$12, equipements=$13  WHERE id=$14 RETURNING id",
         [
             
             this.title,
@@ -57,12 +59,13 @@ class Houses {
             this.off_days,
             this.updated_date,
             this.location,
+            this.equipements,
             this.id,
         ]
       );
     } else {
       return pool.query(
-        "INSERT INTO houses (title, description, status, type, nbr_couchage, capacity, price, photos, created_by, created_date, off_days, location, notify) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id",
+        "INSERT INTO houses (title, description, status, type, nbr_couchage, capacity, price, photos, created_by, created_date, off_days, location, notify, equipements) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) RETURNING id",
         [
             this.title,
             this.description,
@@ -76,7 +79,8 @@ class Houses {
             this.created_date,
             this.off_days,
             this.location,
-            true
+            true,
+            this.equipements
         ]
       );
     }
