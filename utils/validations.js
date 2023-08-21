@@ -46,7 +46,7 @@ const createHouseValidation = (data) => {
     off_days: Joi.array().items(Joi.number()),
     location: Joi.string(),
     user_id: Joi.string().guid({ version: ["uuidv4", "uuidv5"] }).required(),
-    equipements: Joi.array().items(Joi.object()).allow([], null)
+    equipements: Joi.array().items(Joi.object()).allow(null)
   });
 
   return schema.validate(data);
