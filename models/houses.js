@@ -123,7 +123,7 @@ class Houses {
   }
 
   static deleteById(id) {
-    return pool.query("DELETE FROM houses WHERE id=$1", [id]);
+    return pool.query("UPDATE houses SET status=$1  WHERE id=$2 RETURNING id", ['deleted', id]);
   }
 }
 

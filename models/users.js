@@ -112,7 +112,7 @@ class Users {
   }
 
   static deleteById(id) {
-    return pool.query("DELETE FROM users WHERE id=$1", [id]);
+    return pool.query("UPDATE users SET status=$1, email=$2 WHERE id=$3 RETURNING id", ['deleted', null, id]);
   }
 }
 

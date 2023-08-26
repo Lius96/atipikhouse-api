@@ -51,7 +51,7 @@ class Booking {
             this.house,
             this.billing_details,
             this.created_at,
-            !this.status && this.status !='' ? this.status : 'pending' 
+            this.status && this.status !='' ? this.status : 'pending' 
         ]
       );
     }
@@ -86,7 +86,7 @@ class Booking {
   }
 
   static deleteById(id) {
-    return pool.query("DELETE FROM booking WHERE id=$1", [id]);
+    return pool.query("UPDATE booking SET status=$1, start_date=$2, end_date=$3 WHERE id=$4 RETURNING id", ['canceled', 0, 0, id]);
   }
 }
 
