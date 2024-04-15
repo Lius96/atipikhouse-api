@@ -48,12 +48,12 @@ exports.sendMail = asyncHandler(async (req, res, next) => {
 
 /**
  * @desc   send recpatcha token
- * @route   POST /api/v1/mail/recaptcha/
+ * @route   GET /api/v1/mail/recaptcha/
  * @access  Private
  */
 exports.getRecaptcha = asyncHandler(async (req, res, next) => {
   const { response } = req.params;
-  const verifiedStatus = await axios.get(
+  axios.get(
     `https://www.google.com/recaptcha/api/siteverify`,
     {
       params: {
@@ -65,6 +65,10 @@ exports.getRecaptcha = asyncHandler(async (req, res, next) => {
         "Access-Control-Allow-Origin": "*",
       },
     }
-  );
-  res.status(200).json(verifiedStatus);
+  ).then(function (response) {
+    res.status(200).json(response);
+  }).catch(function (error) {
+    console.log(error);
+  });
+  
 });
