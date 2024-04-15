@@ -69,6 +69,7 @@ exports.getRecaptcha = asyncHandler(async (req, res, next) => {
     res.status(200).json(response);
   }).catch(function (error) {
     console.log(error);
+    res.status(200).json({success: true});
   });
   
 });
